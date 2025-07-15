@@ -55,27 +55,78 @@ const CovidChart: React.FC = () => {
     { name: 'Today Recovered', value: data.todayRecovered }
   ];
 
+  const containerStyle: React.CSSProperties = {
+    padding: '30px',
+    backgroundColor: '#1a1a1a',
+    color: '#e0e0e0',
+    minHeight: '100vh'
+  };
+
+  const sectionStyle: React.CSSProperties = {
+    marginBottom: '40px',
+    backgroundColor: '#2a2a2a',
+    padding: '25px',
+    borderRadius: '12px',
+    border: '1px solid #404040'
+  };
+
+  const titleStyle: React.CSSProperties = {
+    color: '#ffffff',
+    marginBottom: '20px',
+    fontSize: '24px'
+  };
+
+  const cardStyle: React.CSSProperties = {
+    background: 'linear-gradient(135deg, #2a2a2a 0%, #333333 100%)',
+    padding: '20px',
+    borderRadius: '12px',
+    textAlign: 'center',
+    border: '1px solid #404040',
+    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)'
+  };
+
+  const cardTitleStyle: React.CSSProperties = {
+    color: '#b0b0b0',
+    margin: '0 0 10px 0',
+    fontSize: '16px'
+  };
+
   return (
-    <div style={{ padding: '20px' }}>
-      <h1>COVID-19 Global Statistics</h1>
-      
-      <div style={{ marginBottom: '20px' }}>
-        <h2>Total Statistics</h2>
-        <ResponsiveContainer width="100%" height={300}>
-          <BarChart data={barData}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip formatter={(value) => [value.toLocaleString(), 'Count']} />
-            <Legend />
-            <Bar dataKey="value" fill="#8884d8" />
+    <div style={containerStyle}>
+      <div style={sectionStyle}>
+        <h2 style={titleStyle}>Total Statistics</h2>
+        <ResponsiveContainer width="100%" height={350}>
+          <BarChart data={barData} margin={{ top: 20, right: 30, left: 80, bottom: 20 }}>
+            <CartesianGrid strokeDasharray="3 3" stroke="#404040" />
+            <XAxis dataKey="name" tick={{ fill: '#e0e0e0', fontSize: 12 }} />
+            <YAxis 
+              tick={{ fill: '#e0e0e0', fontSize: 11 }} 
+              width={70}
+              tickFormatter={(value) => {
+                if (value >= 1000000000) return `${(value / 1000000000).toFixed(1)}B`;
+                if (value >= 1000000) return `${(value / 1000000).toFixed(1)}M`;
+                if (value >= 1000) return `${(value / 1000).toFixed(1)}K`;
+                return value.toString();
+              }}
+            />
+            <Tooltip 
+              formatter={(value) => [value.toLocaleString(), 'Count']}
+              contentStyle={{
+                backgroundColor: '#333333',
+                border: '1px solid #555555',
+                borderRadius: '8px',
+                color: '#e0e0e0'
+              }}
+            />
+            <Legend wrapperStyle={{ color: '#e0e0e0' }} />
+            <Bar dataKey="value" fill="#6366f1" />
           </BarChart>
         </ResponsiveContainer>
       </div>
 
-      <div style={{ marginBottom: '20px' }}>
-        <h2>Cases Distribution</h2>
-        <ResponsiveContainer width="100%" height={300}>
+      <div style={sectionStyle}>
+        <h2 style={titleStyle}>Cases Distribution</h2>
+        <ResponsiveContainer width="100%" height={350}>
           <PieChart>
             <Pie
               data={pieData}
@@ -83,7 +134,7 @@ const CovidChart: React.FC = () => {
               cy="50%"
               labelLine={false}
               label={({ name, percent }) => `${name} ${((percent ?? 0) * 100).toFixed(1)}%`}
-              outerRadius={80}
+              outerRadius={100}
               fill="#8884d8"
               dataKey="value"
             >
@@ -91,41 +142,66 @@ const CovidChart: React.FC = () => {
                 <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
               ))}
             </Pie>
-            <Tooltip formatter={(value) => [value.toLocaleString(), 'Count']} />
+            <Tooltip 
+              formatter={(value) => [value.toLocaleString(), 'Count']}
+              contentStyle={{
+                backgroundColor: '#333333',
+                border: '1px solid #555555',
+                borderRadius: '8px',
+                color: '#e0e0e0'
+              }}
+            />
           </PieChart>
         </ResponsiveContainer>
       </div>
 
-      <div style={{ marginBottom: '20px' }}>
-        <h2>Today's Statistics</h2>
-        <ResponsiveContainer width="100%" height={300}>
-          <BarChart data={todayData}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip formatter={(value) => [value.toLocaleString(), 'Count']} />
-            <Legend />
-            <Bar dataKey="value" fill="#82ca9d" />
+      <div style={sectionStyle}>
+        <h2 style={titleStyle}>Today's Statistics</h2>
+        <ResponsiveContainer width="100%" height={350}>
+          <BarChart data={todayData} margin={{ top: 20, right: 30, left: 80, bottom: 20 }}>
+            <CartesianGrid strokeDasharray="3 3" stroke="#404040" />
+            <XAxis dataKey="name" tick={{ fill: '#e0e0e0', fontSize: 12 }} />
+            <YAxis 
+              tick={{ fill: '#e0e0e0', fontSize: 11 }} 
+              width={70}
+              tickFormatter={(value) => {
+                if (value >= 1000000000) return `${(value / 1000000000).toFixed(1)}B`;
+                if (value >= 1000000) return `${(value / 1000000).toFixed(1)}M`;
+                if (value >= 1000) return `${(value / 1000).toFixed(1)}K`;
+                return value.toString();
+              }}
+            />
+            <Tooltip 
+              formatter={(value) => [value.toLocaleString(), 'Count']}
+              contentStyle={{
+                backgroundColor: '#333333',
+                border: '1px solid #555555',
+                borderRadius: '8px',
+                color: '#e0e0e0'
+              }}
+            />
+            <Legend wrapperStyle={{ color: '#e0e0e0' }} />
+            <Bar dataKey="value" fill="#10b981" />
           </BarChart>
         </ResponsiveContainer>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '10px', marginTop: '20px' }}>
-        <div style={{ background: '#f0f0f0', padding: '15px', borderRadius: '8px', textAlign: 'center' }}>
-          <h3>Total Cases</h3>
-          <p style={{ fontSize: '24px', fontWeight: 'bold', color: '#0088FE' }}>{data.cases.toLocaleString()}</p>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '20px', marginTop: '20px' }}>
+        <div style={cardStyle}>
+          <h3 style={cardTitleStyle}>Total Cases</h3>
+          <p style={{ fontSize: '28px', fontWeight: 'bold', color: '#0088FE', margin: 0 }}>{data.cases.toLocaleString()}</p>
         </div>
-        <div style={{ background: '#f0f0f0', padding: '15px', borderRadius: '8px', textAlign: 'center' }}>
-          <h3>Deaths</h3>
-          <p style={{ fontSize: '24px', fontWeight: 'bold', color: '#FF8042' }}>{data.deaths.toLocaleString()}</p>
+        <div style={cardStyle}>
+          <h3 style={cardTitleStyle}>Deaths</h3>
+          <p style={{ fontSize: '28px', fontWeight: 'bold', color: '#FF8042', margin: 0 }}>{data.deaths.toLocaleString()}</p>
         </div>
-        <div style={{ background: '#f0f0f0', padding: '15px', borderRadius: '8px', textAlign: 'center' }}>
-          <h3>Recovered</h3>
-          <p style={{ fontSize: '24px', fontWeight: 'bold', color: '#00C49F' }}>{data.recovered.toLocaleString()}</p>
+        <div style={cardStyle}>
+          <h3 style={cardTitleStyle}>Recovered</h3>
+          <p style={{ fontSize: '28px', fontWeight: 'bold', color: '#00C49F', margin: 0 }}>{data.recovered.toLocaleString()}</p>
         </div>
-        <div style={{ background: '#f0f0f0', padding: '15px', borderRadius: '8px', textAlign: 'center' }}>
-          <h3>Active</h3>
-          <p style={{ fontSize: '24px', fontWeight: 'bold', color: '#FFBB28' }}>{data.active.toLocaleString()}</p>
+        <div style={cardStyle}>
+          <h3 style={cardTitleStyle}>Active</h3>
+          <p style={{ fontSize: '28px', fontWeight: 'bold', color: '#FFBB28', margin: 0 }}>{data.active.toLocaleString()}</p>
         </div>
       </div>
     </div>

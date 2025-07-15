@@ -49,35 +49,38 @@ const CovidHistoricalChart: React.FC = () => {
   const containerStyle: React.CSSProperties = {
     maxWidth: '1200px',
     margin: '0 auto',
-    backgroundColor: 'white',
-    padding: '20px',
-    borderRadius: '10px',
-    boxShadow: '0 2px 10px rgba(0,0,0,0.1)'
+    backgroundColor: '#2a2a2a',
+    padding: '30px',
+    borderRadius: '12px',
+    boxShadow: '0 8px 32px rgba(0,0,0,0.3)',
+    border: '1px solid #404040'
   };
 
   const statsStyle: React.CSSProperties = {
     display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
     gap: '20px',
-    marginTop: '20px'
+    marginTop: '30px'
   };
 
   const statCardStyle: React.CSSProperties = {
-    backgroundColor: '#f8f9fa',
-    padding: '20px',
-    borderRadius: '8px',
-    textAlign: 'center'
+    background: 'linear-gradient(135deg, #333333 0%, #404040 100%)',
+    padding: '25px',
+    borderRadius: '12px',
+    textAlign: 'center',
+    border: '1px solid #555555',
+    boxShadow: '0 4px 16px rgba(0, 0, 0, 0.2)'
   };
 
   const statNumberStyle: React.CSSProperties = {
-    fontSize: '24px',
+    fontSize: '28px',
     fontWeight: 'bold',
-    marginBottom: '5px'
+    marginBottom: '8px'
   };
 
   const statLabelStyle: React.CSSProperties = {
-    color: '#666',
-    fontSize: '14px'
+    color: '#b0b0b0',
+    fontSize: '16px'
   };
 
   const formatTooltipValue = (value: number, name: string) => {
@@ -85,34 +88,47 @@ const CovidHistoricalChart: React.FC = () => {
   };
 
   return (
-    <div style={{ fontFamily: 'Arial, sans-serif', margin: '20px', backgroundColor: '#f5f5f5', minHeight: '100vh' }}>
+    <div style={{ fontFamily: 'Arial, sans-serif', padding: '30px', backgroundColor: '#1a1a1a', minHeight: '100vh' }}>
       <div style={containerStyle}>
-        <h1 style={{ textAlign: 'center', color: '#333', marginBottom: '30px' }}>
+        <h1 style={{ textAlign: 'center', color: '#ffffff', marginBottom: '40px', fontSize: '32px' }}>
           COVID-19 Historical Data
         </h1>
         
-        <div style={{ position: 'relative', height: '500px', marginBottom: '30px' }}>
+        <div style={{ position: 'relative', height: '500px', marginBottom: '30px', backgroundColor: '#1f1f1f', padding: '20px', borderRadius: '12px', border: '1px solid #404040' }}>
           <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={chartData}>
-              <CartesianGrid strokeDasharray="3 3" />
+            <LineChart data={chartData} margin={{ top: 20, right: 30, left: 100, bottom: 20 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#404040" />
               <XAxis 
                 dataKey="date" 
-                tick={{ fontSize: 12 }}
+                tick={{ fontSize: 11, fill: '#e0e0e0' }}
                 tickFormatter={(value) => new Date(value).toLocaleDateString('ja-JP', { month: 'short', year: 'numeric' })}
               />
               <YAxis 
-                tickFormatter={(value) => value.toLocaleString()}
+                tick={{ fill: '#e0e0e0', fontSize: 10 }}
+                width={90}
+                tickFormatter={(value) => {
+                  if (value >= 1000000000) return `${(value / 1000000000).toFixed(1)}B`;
+                  if (value >= 1000000) return `${(value / 1000000).toFixed(1)}M`;
+                  if (value >= 1000) return `${(value / 1000).toFixed(1)}K`;
+                  return value.toString();
+                }}
               />
               <Tooltip 
                 formatter={formatTooltipValue}
                 labelFormatter={(value) => new Date(value).toLocaleDateString('ja-JP')}
+                contentStyle={{
+                  backgroundColor: '#333333',
+                  border: '1px solid #555555',
+                  borderRadius: '8px',
+                  color: '#e0e0e0'
+                }}
               />
-              <Legend />
+              <Legend wrapperStyle={{ color: '#e0e0e0' }} />
               <Line
                 type="monotone"
                 dataKey="cases"
                 stroke="#ff6b6b"
-                strokeWidth={2}
+                strokeWidth={3}
                 dot={false}
                 name="Total Cases"
               />
@@ -120,7 +136,7 @@ const CovidHistoricalChart: React.FC = () => {
                 type="monotone"
                 dataKey="deaths"
                 stroke="#ff8c42"
-                strokeWidth={2}
+                strokeWidth={3}
                 dot={false}
                 name="Total Deaths"
               />
@@ -128,7 +144,7 @@ const CovidHistoricalChart: React.FC = () => {
                 type="monotone"
                 dataKey="recovered"
                 stroke="#51cf66"
-                strokeWidth={2}
+                strokeWidth={3}
                 dot={false}
                 name="Total Recovered"
               />
