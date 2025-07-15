@@ -15,4 +15,4 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 * https://disease.sh/v3/covid-19/all 上記APIの結果をフロントエンドReact上でグラフ表示できるようにしてください
 * APIのライブラリを「swr」に変更してください
-* 
+* https://disease.sh/v3/covid-19/historical/all?lastdays=all の内容をグラフとして追加してください。
