@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
-import axios from 'axios';
+import useSWR from 'swr';
 
 interface CovidData {
   updated: number;
@@ -27,28 +27,13 @@ interface CovidData {
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 
+const fetcher = (url: string) => fetch(url).then(res => res.json());
+
 const CovidChart: React.FC = () => {
-  const [data, setData] = useState<CovidData | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const { data, error, isLoading } = useSWR<CovidData>('https://disease.sh/v3/covid-19/all', fetcher);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get<CovidData>('https://disease.sh/v3/covid-19/all');
-        setData(response.data);
-        setLoading(false);
-      } catch (err) {
-        setError('Failed to fetch COVID-19 data');
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  if (loading) return <div>Loading COVID-19 data...</div>;
-  if (error) return <div>Error: {error}</div>;
+  if (isLoading) return <div>Loading COVID-19 data...</div>;
+  if (error) return <div>Error: Failed to fetch COVID-19 data</div>;
   if (!data) return <div>No data available</div>;
 
   const barData = [
