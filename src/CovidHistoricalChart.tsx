@@ -18,14 +18,20 @@ interface ChartDataPoint {
 const fetcher = (url: string) => fetch(url).then(res => res.json());
 
 const CovidHistoricalChart: React.FC = () => {
-  const { data, error, isLoading } = useSWR<HistoricalData>(
+  const { data } = useSWR<HistoricalData>(
     'https://disease.sh/v3/covid-19/historical/all?lastdays=all',
-    fetcher
+    fetcher,
+    {
+      suspense: true,
+      errorRetryCount: 3,
+      errorRetryInterval: 1000
+    }
   );
 
-  if (isLoading) return <div style={{ textAlign: 'center', padding: '50px', color: '#666' }}>データを読み込み中...</div>;
-  if (error) return <div style={{ textAlign: 'center', padding: '50px', color: '#666' }}>データの読み込みに失敗しました。</div>;
-  if (!data) return <div style={{ textAlign: 'center', padding: '50px', color: '#666' }}>データが利用できません。</div>;
+  // Suspenseを使用しているため、dataは必ず存在する
+  if (!data) {
+    throw new Error('Data is unexpectedly undefined');
+  }
 
   const processData = (data: HistoricalData): ChartDataPoint[] => {
     const dates = Object.keys(data.cases);

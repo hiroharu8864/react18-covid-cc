@@ -30,11 +30,16 @@ const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 const fetcher = (url: string) => fetch(url).then(res => res.json());
 
 const CovidChart: React.FC = () => {
-  const { data, error, isLoading } = useSWR<CovidData>('https://disease.sh/v3/covid-19/all', fetcher);
+  const { data } = useSWR<CovidData>('https://disease.sh/v3/covid-19/all', fetcher, {
+    suspense: true,
+    errorRetryCount: 3,
+    errorRetryInterval: 1000
+  });
 
-  if (isLoading) return <div>Loading COVID-19 data...</div>;
-  if (error) return <div>Error: Failed to fetch COVID-19 data</div>;
-  if (!data) return <div>No data available</div>;
+  // Suspenseを使用しているため、dataは必ず存在する
+  if (!data) {
+    throw new Error('Data is unexpectedly undefined');
+  }
 
   const barData = [
     { name: 'Cases', value: data.cases },

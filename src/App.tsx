@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, Suspense } from 'react';
 import './App.css';
 import CovidChart from './CovidChart';
 import CovidHistoricalChart from './CovidHistoricalChart';
+import LoadingSpinner from './components/LoadingSpinner';
+import ErrorBoundary from './components/ErrorBoundary';
 
 function App() {
   const [activeTab, setActiveTab] = useState<'current' | 'historical'>('current');
@@ -81,7 +83,11 @@ function App() {
         </div>
       </div>
       
-      {activeTab === 'current' ? <CovidChart /> : <CovidHistoricalChart />}
+      <ErrorBoundary>
+        <Suspense fallback={<LoadingSpinner />}>
+          {activeTab === 'current' ? <CovidChart /> : <CovidHistoricalChart />}
+        </Suspense>
+      </ErrorBoundary>
     </div>
   );
 }
