@@ -1,18 +1,40 @@
-# Getting Started with Create React App
+# COVID-19 Dashboard
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+React18を使用したCOVID-19データの可視化ダッシュボードです。
 
-## アプリケーション
+## 機能
 
-* https://disease.sh/v3/covid-19/all
-* 上記APIの結果をフロントエンドReact上でグラフ表示する。グラフのタイトルは「covid-19罹患者数」
-* APIのライブラリには、「swr」を採用すること
-* APIのデータ取得の間は、ReactのSuspenseタグで表示中のローディング画面を実装する
-* グラフの表示時には「react-countup」ライブラリを利用して、動きを出して欲しい
-* APIのレスポンスをTypeScriptの型定義で確認する
+- 📊 COVID-19の最新統計データの表示
+- 📈 歴史的データの時系列グラフ
+- ⚡ SWRライブラリによる効率的なデータフェッチ
+- 🎨 ダークモードテーマ
+- 🔄 Suspenseを使用したローディング状態の管理
 
-## 指示内容
+## 技術スタック
 
-* https://disease.sh/v3/covid-19/all 上記APIの結果をフロントエンドReact上でグラフ表示できるようにしてください
-* APIのライブラリを「swr」に変更してください
-* https://disease.sh/v3/covid-19/historical/all?lastdays=all の内容をグラフとして追加してください。
+- **React 19.1.0** - フロントエンドフレームワーク
+- **TypeScript** - 型安全性
+- **SWR** - データフェッチライブラリ
+- **Recharts** - グラフ描画ライブラリ
+- **React Suspense** - ローディング状態管理
+
+## 使用API
+
+- `https://disease.sh/v3/covid-19/all` - 最新の全世界統計
+- `https://disease.sh/v3/covid-19/historical/all?lastdays=all` - 歴史的データ
+
+## セットアップ
+
+```bash
+# 依存関係のインストール
+yarn install
+
+# 開発サーバーの起動
+yarn start
+
+# ビルド
+yarn build
+
+# テスト実行
+yarn test
+```
